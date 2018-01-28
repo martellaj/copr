@@ -10,9 +10,7 @@ let oldMachineName;
  * Get stored machine name from settings, fill the input with
  * it, and store it for later comparison.
  */
-chrome.storage.sync.get({
-    machineName
-}, function (options) {
+chrome.storage.sync.get('machineName', function (options) {
     if (typeof options.machineName === 'string') {
         oldMachineName = options.machineName;
         machineNameInput.value = options.machineName;
@@ -54,7 +52,7 @@ machineNameInput.addEventListener('keyup', () => {
                 savedMessage.innerText = 'Machine name cleared!';
                 savedMessage.style.visibility = 'visible';
             }
-        }, 1000);
+        }, 500);
     });
 });
 
