@@ -1,6 +1,6 @@
 (function() {
     const intervalId = setInterval(() => {
-        const descriptionContainer = document.getElementsByClassName('vc-pullRequestCreate-description-container')[0];
+        const descriptionContainer = document.getElementsByClassName('vc-pullRequestCreate-title')[0];
 
         if (descriptionContainer) {
             // Add element for user to interact with.
@@ -17,10 +17,10 @@
     const addAnchorToDom = (descriptionContainer) => {
         const anchor = document.createElement('a');
 
-        anchor.innerText = 'Prepare PR';
+        anchor.innerText = 'Stop in the name of helpful PR descriptions!';
         anchor.onclick = onClick;
 
-        descriptionContainer.insertAdjacentElement('afterbegin', anchor);
+        descriptionContainer.insertAdjacentElement('afterend', anchor);
     };
 
     /**
