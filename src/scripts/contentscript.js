@@ -104,6 +104,6 @@
              * NOTE: Did it this way so focus ends up in description box!
              */
             next(workItemNumber);
-        }, 500);
+        }, 1000);
     };
 })();
