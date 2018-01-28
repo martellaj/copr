@@ -63,14 +63,37 @@
     const fillDescription = (workItemNumber) => {
         const descriptionBox = document.getElementById('description-edit');
 
-        let description = '**Links**\n';
-        description += `- #${workItemNumber}\n`;
-        description += '- [Deploy URL]()\n\n'
-        description += '**Changes**\n';
-        description += '- Changes a thing to make OWA better';
+        chrome.storage.sync.get('machineName', function (options) {
+            /**
+             * Default the "Deploy URL" part of the description to a dummy value that
+             * tells user to fill out machine name in the popup to generate it next time,
+             * since the machine name is required. If we have a machine name value from
+             * options, override the dummy string with the actual deploy URL.
+             */
+            let deployUrlString = `- [Deploy URL](Add a machine name in the extension's popup so this gets filled out!)\n\n`;
+            if (typeof options.machineName === 'string' && options.machineName !== '') {
+                // Get full branch name, then replace forward slashes with hyphens.
+                const container = document.getElementsByClassName('vc-pullRequestCreate-branches-container')[0];
+                const branchName = container.getElementsByClassName('selected-item-text')[0].innerText;
+                const modifiedBranchName = branchName.replace(/\//g, '-');
 
-        descriptionBox.value = description;
-        descriptionBox.focus();
+                deployUrlString = `- [Deploy URL](https://outlook-sdf.office.com/mail/?branch=${options.machineName}-${modifiedBranchName})\n\n`;
+            }
+
+            // Build the description text.
+            let description = '**Links**\n';
+            description += `- #${workItemNumber}\n`;
+            description += deployUrlString;
+            description += '**Changes**\n';
+            description += '- Changes a thing to make OWA better';
+
+            /**
+             * Set the textarea's value to the description text, and then it so
+             * user's cursor ends up there.
+             */
+            descriptionBox.value = description;
+            descriptionBox.focus();
+        });
     };
 
     /**
