@@ -1,63 +1,60 @@
-import ext from "./utils/ext";
-import storage from "./utils/storage";
+// Get elements to interact with.
+const machineNameInput = document.getElementById('machineName');
+const savedMessage = document.getElementById('savedMessage');
 
-var popup = document.getElementById("app");
-storage.get('color', function(resp) {
-  var color = resp.color;
-  if(color) {
-    popup.style.backgroundColor = color
-  }
+// Variables for managing saved message state.
+let savedMessageTimer;
+let oldMachineName;
+
+/**
+ * Get stored machine name from settings, fill the input with
+ * it, and store it for later comparison.
+ */
+chrome.storage.sync.get({
+    machineName
+}, function (options) {
+    if (typeof options.machineName === 'string') {
+        oldMachineName = options.machineName;
+        machineNameInput.value = options.machineName;
+    }
 });
 
-var template = (data) => {
-  var json = JSON.stringify(data);
-  return (`
-  <div class="site-description">
-    <h3 class="title">${data.title}</h3>
-    <p class="description">${data.description}</p>
-    <a href="${data.url}" target="_blank" class="url">${data.url}</a>
-  </div>
-  <div class="action-container">
-    <button data-bookmark='${json}' id="save-btn" class="btn btn-primary">Save</button>
-  </div>
-  `);
-}
-var renderMessage = (message) => {
-  var displayContainer = document.getElementById("display-container");
-  displayContainer.innerHTML = `<p class='message'>${message}</p>`;
-}
+/**
+ * When user changes value in the input, save the new value to
+ * their settings. If it's a new machine name, let them know
+ * that it was saved successfully after they've stopped typing
+ * for 1 second.
+ */
+machineNameInput.addEventListener('keyup', () => {
+    chrome.storage.sync.set({
+        machineName: machineNameInput.value
+    }, () => {
+        const newMachineName = machineNameInput.value !== oldMachineName;
+        const emptyMachineName = machineNameInput.value === '';
 
-var renderBookmark = (data) => {
-  var displayContainer = document.getElementById("display-container")
-  if(data) {
-    var tmpl = template(data);
-    displayContainer.innerHTML = tmpl;  
-  } else {
-    renderMessage("Sorry, could not extract this page's title and URL")
-  }
-}
+        /**
+         * If user types another key before timer expires, clear the
+         * existing timer so we don't show a premature success message.
+         */
+        if (savedMessageTimer && newMachineName) {
+            window.clearTimeout(savedMessageTimer);
+            savedMessage.style.visibility = 'collapse';
+        }
 
-ext.tabs.query({active: true, currentWindow: true}, function(tabs) {
-  var activeTab = tabs[0];
-  chrome.tabs.sendMessage(activeTab.id, { action: 'process-page' }, renderBookmark);
+        /**
+         * Set a new timer after keyup to show user a success message
+         * after 1 second.
+         */
+        savedMessageTimer = setTimeout(() => {
+            if (newMachineName && !emptyMachineName) {
+                oldMachineName = machineNameInput.value;
+                savedMessage.innerText = 'Machine name saved!';
+                savedMessage.style.visibility = 'visible';
+            } else if (emptyMachineName) {
+                savedMessage.innerText = 'Machine name cleared!';
+                savedMessage.style.visibility = 'visible';
+            }
+        }, 1000);
+    });
 });
 
-popup.addEventListener("click", function(e) {
-  if(e.target && e.target.matches("#save-btn")) {
-    e.preventDefault();
-    var data = e.target.getAttribute("data-bookmark");
-    ext.runtime.sendMessage({ action: "perform-save", data: data }, function(response) {
-      if(response && response.action === "saved") {
-        renderMessage("Your bookmark was saved successfully!");
-      } else {
-        renderMessage("Sorry, there was an error while saving your bookmark.");
-      }
-    })
-  }
-});
-
-var optionsLink = document.querySelector(".js-options");
-optionsLink.addEventListener("click", function(e) {
-  e.preventDefault();
-  ext.tabs.create({'url': ext.extension.getURL('options.html')});
-})

@@ -3,22 +3,20 @@
   <head>
     <meta charset="utf-8">
     <link href="styles/popup.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/7.3.0/css/fabric.min.css">
   </head>
   <body>
     <div id="app" class="popup-content">
-      <h1 class="app-name">Extension Boilerplate</h1>
+      <h1 id="appName">COPR</h1>
+      <h2 id="appNameExpanded" class="ms-fontWeight-semilight"><span class="ms-fontWeight-semibold">C</span>anned <span class="ms-fontWeight-semibold">O</span>WA <span class="ms-fontWeight-semibold">PR</span>s</h2>
 
-      <div id="display-container"></div>
-
-      <footer>
-        <p>
-          <small>
-            <a href="#" class="js-options">Options</a>
-          </small>
-        </p>
-      </footer>
+      <div id="display-container">
+        <label id="machineNameLabel">machine name</label>
+        <input id="machineName" placeholder="i.e. joem-dev"/>
+        <span id="savedMessage">placeholder</span>
+      </div>
     </div>
-    
+
     <script src="scripts/popup.js"></script>
   </body>
 </html>
