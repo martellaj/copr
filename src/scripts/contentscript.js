@@ -34,7 +34,8 @@
         // Get work item number.
         const workItemNumber = getWorkItemNumber(branchName);
 
-        fillDescription(workItemNumber);
+        // Selects work item for PR, and supplies function to do next.
+        addWorkItem(workItemNumber, fillDescription);
     };
 
     /**
@@ -66,9 +67,43 @@
         description += `- #${workItemNumber}\n`;
         description += '- [Deploy URL]()\n\n'
         description += '**Changes**\n';
-        description += '- ';
+        description += '- Changes a thing to make OWA better';
 
         descriptionBox.value = description;
         descriptionBox.focus();
+    };
+
+    /**
+     * Adds the work item to the PR.
+     * @param {number} workItemNumber
+     */
+    const addWorkItem = async (workItemNumber, next) => {
+        /**
+         * Input work item number into "Work Items" input and click to fetch
+         * work item suggestions.
+         */
+        const input = document.getElementsByClassName('vc-pullrequest-view-details-relatedartifacts-addartifactbox')[0];
+        input.value = workItemNumber;
+        input.click();
+
+        /**
+         * Give a little time for results to populate, and then select the
+         * first one.
+         */
+        setTimeout(() => {
+            // Select top suggestion.
+            const suggestionsContainer = document.getElementsByClassName('vc-pullrequest-view-details-relatedartifacts-addartifactbox-container')[0];
+            const suggestion = suggestionsContainer.getElementsByTagName('li')[0];
+            suggestion.click();
+
+            // Clear input.
+            input.value = '';
+
+            /**
+             * Calls "next", which is "fillDescription".
+             * NOTE: Did it this way so focus ends up in description box!
+             */
+            next(workItemNumber);
+        }, 500);
     };
 })();
