@@ -17,7 +17,7 @@ So instead of doing this manually, I created this extension to do all of the abo
 *NOTE: Not until I completed the first version of this project and was adding tags on GitHub did I realize that VSTS has an extension model of its own. Long hair, don't care.*
 
 ## To use this extension
-1. Add it to Chrome (if anyone wants a different browser, I can make it available).
+1. [Add it to Chrome](https://chrome.google.com/webstore/detail/copr/chobboogacobhpeihbbanjfgdkljapin?hl=en) (if anyone wants a different browser, I can make it available).
 2. Add your machine name in the extension's popup (this is to create the deploy URL).
 3. Click the "Stop in the name of helpful PR descriptions!" link on the page to create a new PR.
 
