@@ -1,7 +1,8 @@
 # COPR (Canned OWA PRs)
 
     Enhancing your development experience by making your PRs a little simpler.
-<center><img src="https://media.giphy.com/media/10nMEclFWTPCp2/giphy.gif"></center>
+
+![](https://media.giphy.com/media/10nMEclFWTPCp2/giphy.gif)
 
 This is a Chrome extension I wrote after I found myself doing the same thing and typing the same thing every time I created a PR at work (I work on Outlook.com, thus "OWA").
 
