@@ -4,6 +4,8 @@
 
 ![](https://media.giphy.com/media/10nMEclFWTPCp2/giphy.gif)
 
+*NOTE: Not until I completed the first version of this project and was adding tags on GitHub did I realize that VSTS has an extension model of its own. Long hair, don't care.*
+
 This is a Chrome extension I wrote after I found myself doing the same thing and typing the same thing every time I created a PR at work (I work on Outlook.com, thus "OWA").
 
 - I link a VSTS work item to the PR.
