@@ -21,8 +21,7 @@ var manifest = {
   dev: {
     "background": {
       "scripts": [
-        "scripts/livereload.js",
-        "scripts/background.js"
+        "scripts/livereload.js"
       ]
     }
   },
